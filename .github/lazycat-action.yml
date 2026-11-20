@@ -1,0 +1,19 @@
+version_source:
+  type: image
+  image: pushgo
+
+images:
+  - id: pushgo
+    target: pushgo
+    service: pushgo
+    source: ghcr.io/aldenclark/pushgo-gateway
+    channel: stable
+    sort: semver
+    tag_regex: '^v\d+\.\d+\.\d+$'
+    delivery:
+      mode: mirror
+      require_digest_match: true
+
+stores:
+  private:
+    - community.lazycat.app.pushgo
