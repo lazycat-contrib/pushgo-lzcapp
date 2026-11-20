@@ -1,19 +1,15 @@
-name: community.lazycat.app.pushgo
-version: 1.3.2
-type: app
-
-# upstream: AldenClark/pushgo-gateway  MIT
-# 懒猫打包：镜像模式，仅发喵喵商店
-icon: ./icon.png
-
-source:
-  upstream: https://github.com/AldenClark/pushgo-gateway
-  licence: MIT
-
-architecture: linux/amd64,linux/arm64
+application:
+  subdomain: pushgo
+  multi_instance: false
+  upstreams:
+    - location: /
+      backend: http://pushgo:6666
+  public_path:
+    - /
 
 services:
   pushgo:
+    # 镜像模式：Action 只读校验后改写成加速地址（ghcr.1ms.run）
     image: ghcr.1ms.run/aldenclark/pushgo-gateway:v1.3.2
     healthcheck:
       test:
@@ -26,18 +22,15 @@ services:
     ports:
       - "6666:6666"
     command:
-      # 默认只开公共 API，私输输需要额外部署（QUIC/TCP/WSS/MQTT）；关闭以避免端口冲突
       - --http-addr
       - 0.0.0.0:6666
       - --private-transports
       - none
       - --token-service-url
       - https://token.pushgo.cn
-      # 公共基础 URL 适配懒猫微服域名
       - --public-base-url
       - https://{{ .S.AppDomain }}
     environment:
-      # 可选：全局访问密钥（留空则无需 token 访问公共 API）
       - PUSHGO_TOKEN={{ .U.pushgo_token }}
     volumes:
       - pushgo-data:/data
@@ -48,5 +41,3 @@ volumes:
 
 deployment:
   replicas: 1
-
-public_path: /
