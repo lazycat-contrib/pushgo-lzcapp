@@ -9,7 +9,6 @@ application:
 
 services:
   pushgo:
-    # 镜像模式：Action 只读校验后改写成加速地址（ghcr.1ms.run）
     image: ghcr.1ms.run/aldenclark/pushgo-gateway:v1.3.2
     healthcheck:
       test:
@@ -19,8 +18,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-    ports:
-      - "6666:6666"
     command:
       - --http-addr
       - 0.0.0.0:6666
@@ -32,12 +29,9 @@ services:
       - https://{{ .S.AppDomain }}
     environment:
       - PUSHGO_TOKEN={{ .U.pushgo_token }}
-    volumes:
-      - pushgo-data:/data
+    binds:
+      - /lzcapp/var/pushgo:/data
 
-volumes:
-  pushgo-data:
-    type: persist
-
-deployment:
-  replicas: 1
+usage: |
+  PushGo Gateway 是跨平台消息推送服务，支持 iOS / watchOS / macOS / Android 客户端。
+  默认关闭私有传输，仅开启公共 API。私输输可在设置中开启。
