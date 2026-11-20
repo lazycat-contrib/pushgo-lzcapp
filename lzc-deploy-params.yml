@@ -1,9 +1,8 @@
-wizard:
-  params:
-    - key: pushgo_token
-      type: string
-      label: API 访问密钥
-      description: |
-        留空则公共 API 无需密钥访问；填入则所有请求需携带 PUSHGO_TOKEN header。
-        推荐生产环境设置一个随机字符串。
-      default: ""
+params:
+  - key: pushgo_token
+    type: string
+    label: API 访问密钥
+    description: |
+      留空则公共 API 无需密钥访问；填入则所有请求需携带 PUSHGO_TOKEN header。
+      推荐生产环境设置一个随机字符串。
+    default: ""
