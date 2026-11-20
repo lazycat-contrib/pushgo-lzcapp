@@ -1,12 +1,28 @@
-version_source:
-  type: image
-  image: pushgo
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/pushgo.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: pushgo
+
+build:
+  toolchains: []
+  run_buildscript: false
 
 images:
   - id: pushgo
-    target: pushgo
+    target: service
     service: pushgo
-    source: ghcr.io/aldenclark/pushgo-gateway
+    source: aldenclark/pushgo-gateway
     channel: stable
     sort: semver
     tag_regex: '^v\d+\.\d+\.\d+$'
@@ -15,5 +31,10 @@ images:
       require_digest_match: true
 
 stores:
+  official:
+    enabled: false
   private:
-    - community.lazycat.app.pushgo
+    enabled: true
+    skip_if_version_exists: true
+    name: PushGo
+    summary: "PushGo Gateway 懒猫微服打包：跨平台消息推送网关，支持 iOS/Android/macOS/WatchOS，MIT，镜像模式。"
