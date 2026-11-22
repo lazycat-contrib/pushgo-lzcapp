@@ -6,10 +6,10 @@ application:
       backend: http://pushgo:6666
   public_path:
     - /
-
 services:
   pushgo:
-    image: ghcr.1ms.run/aldenclark/pushgo-gateway:v1.3.2
+    # upstream: aldenclark/pushgo-gateway:v1.3.2
+    image: docker.1ms.run/aldenclark/pushgo-gateway:v1.3.2
     healthcheck:
       test:
         - CMD-SHELL
@@ -31,7 +31,6 @@ services:
       - PUSHGO_TOKEN={{ .U.pushgo_token }}
     binds:
       - /lzcapp/var/pushgo:/data
-
 usage: |
   PushGo Gateway 是跨平台消息推送服务，支持 iOS / watchOS / macOS / Android 客户端。
   默认关闭私有传输，仅开启公共 API。私输输可在设置中开启。
